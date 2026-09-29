@@ -35,3 +35,6 @@ before those checks pass.
 - Never put source credentials, audio files, reusable media URLs, or headers
   in this repository.
 Versioned connectors for Synthetiq Music.
+
+
+Package verification workflow enabled.
