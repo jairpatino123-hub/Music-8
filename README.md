@@ -38,3 +38,6 @@ Versioned connectors for Synthetiq Music.
 
 
 Package verification workflow enabled.
+
+
+Gateway 1.4.5 package published.
