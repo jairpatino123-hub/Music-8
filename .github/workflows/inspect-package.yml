@@ -1,0 +1,25 @@
+name: Inspect package
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect ZIP
+        run: |
+          python - <<'PY'
+          import zipfile, os
+          p='packages/Synthetiq-Music-Gateway-1.4.5.zip'
+          print('ZIP_BYTES', os.path.getsize(p))
+          with zipfile.ZipFile(p) as z:
+              print('ENTRIES', len(z.infolist()))
+              total=0
+              for i in z.infolist():
+                  print('ENTRY',repr(i.filename),'compressed',i.compress_size,'uncompressed',i.file_size,'method',i.compress_type)
+                  total += i.file_size
+              print('TOTAL_UNCOMPRESSED', total)
+              print('ZIP_TEST', z.testzip())
+          PY
