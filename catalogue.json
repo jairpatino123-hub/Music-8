@@ -11,7 +11,7 @@
       "version": "1.4.5",
       "releaseTrack": "staging",
       "file": "packages/Synthetiq-Music-Gateway-1.4.5.zip",
-      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sha256": "da99705ff7f38ca1dd6a20975afe4d0669994bc0a2a9340109c5c28f2642acca",
       "publishedAt": "2026-09-29T14:05:00Z",
       "changelog": [
         "Playback identity repair: search IDs retain exact title/artist metadata and stale provider IDs recover only through exact identity matching.",
