@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "repository": "Synthetic Music Connectors",
+  "modules": [
+    {
+      "moduleId": "synthetiq-music-gateway-v1",
+      "moduleFamilyId": "synthetiq_music_gateway",
+      "moduleIdentity": "SP-MUS-3006-MUSIC-GATEWAY",
+      "moduleIdentityNumber": 3006,
+      "contentType": "music",
+      "version": "1.4.4",
+      "releaseTrack": "staging",
+      "file": "packages/Synthetiq-Music-Gateway-1.4.4.zip",
+      "sha256": "990cb4e7c5cb6ee90252a29c069a4b4165e6761e30e821b77d3bb8980eaa859f",
+      "publishedAt": "2026-09-29T14:00:00Z",
+      "changelog": [
+        "Playback identity repair: search IDs retain exact title/artist metadata and stale provider IDs recover only through exact identity matching.",
+        "Exact-artist catalogue search with real song/release pagination and artist-credit validation; collaborations retained.",
+        "Source-owned release cards and album tracks; unknown release types remain unclassified, not certified official albums.",
+        "Playback resolution and Smart Radio handlers unchanged from 1.4.2; staged for matching app/device testing.",
+        "Strict recording identity: exact provider IDs, Unicode-safe matching, bounded candidate search; no opaque-ID recursion.",
+        "Genuine source suggestions exposed via music_radio_v1 (Smart Radio) and related tracks; honest failures instead of filler.",
+        "Runtime concurrency capped at one operation; album and home endpoints unchanged.",
+        "Fixed seek bar and stream duration resolution.",
+        "Unified high-fidelity music search and 320kbps full-length stream resolution.",
+        "Added in-module DES-ECB cipher hardware decryption for direct Akamai CDN MP4 audio.",
+        "Added multi-mirror failover and automatic base64 catalogue track decoding."
+      ],
+      "presentation": {
+        "category": "Music",
+        "purpose": "Artist catalogue, playback and Smart Radio - staging",
+        "recommended": true,
+        "language": "Multi-language"
+      }
+    }
+  ]
+}
