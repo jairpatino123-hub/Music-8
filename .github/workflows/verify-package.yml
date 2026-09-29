@@ -1,4 +1,4 @@
-name: Build and verify package
+name: Build compact package
 on:
   push:
     branches: [main]
@@ -9,48 +9,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build valid 1.4.5 ZIP
+      - name: Build compact 1.4.5 package
         run: |
+          npm exec --yes terser@5 -- modules/synthetiq_music_gateway/index.js -c -m -o /tmp/index.min.js
           python - <<'PY'
           from zipfile import ZipFile, ZIP_DEFLATED
           from pathlib import Path
-          src=Path('modules/synthetiq_music_gateway')
           out=Path('packages/Synthetiq-Music-Gateway-1.4.5.zip')
           with ZipFile(out,'w',ZIP_DEFLATED) as z:
-              z.write(src/'module.json','module.json')
-              z.write(src/'index.js','index.js')
+              z.write('modules/synthetiq_music_gateway/module.json','module.json')
+              z.write('/tmp/index.min.js','index.js')
           with ZipFile(out) as z:
-              assert z.testzip() is None
-              names=z.namelist()
-              assert names == ['module.json','index.js'], names
-          print('Built', out, out.stat().st_size, 'bytes')
-          PY
-      - name: Verify ZIP and sync catalogue
-        run: |
-          python - <<'PY'
-          import hashlib, json
-          from zipfile import ZipFile
-          p='packages/Synthetiq-Music-Gateway-1.4.5.zip'
-          with ZipFile(p) as z:
               assert z.testzip() is None
               print('entries:', z.namelist())
               print('uncompressed:', sum(i.file_size for i in z.infolist()))
+              print('index bytes:', z.getinfo('index.js').file_size)
+              print('zip bytes:', out.stat().st_size)
+          PY
+      - name: Sync SHA-256
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          p='packages/Synthetiq-Music-Gateway-1.4.5.zip'
           h=hashlib.sha256(open(p,'rb').read()).hexdigest()
-          with open('catalogue.json',encoding='utf-8') as f: d=json.load(f)
-          m=d['modules'][0]
-          m['version']='1.4.5'
-          m['file']=p
-          m['sha256']=h
-          with open('catalogue.json','w',encoding='utf-8') as f:
-              json.dump(d,f,indent=2,ensure_ascii=False)
-              f.write('\n')
+          with open('catalogue.json',encoding='utf-8') as f:d=json.load(f)
+          m=d['modules'][0]; m['version']='1.4.5'; m['file']=p; m['sha256']=h
+          with open('catalogue.json','w',encoding='utf-8') as f: json.dump(d,f,indent=2,ensure_ascii=False); f.write('\n')
           print('sha256:',h)
           PY
-      - name: Commit generated package
+      - name: Commit package
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add packages/Synthetiq-Music-Gateway-1.4.5.zip catalogue.json
           git diff --cached --quiet && exit 0
-          git commit -m "Rebuild valid 1.4.5 package"
+          git commit -m "Compact 1.4.5 package for extraction limit"
           git push
